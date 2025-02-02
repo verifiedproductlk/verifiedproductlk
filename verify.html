@@ -26,27 +26,11 @@ async function verifyProduct() {
         const found = data.products.find(item => item.encrypted_hash === code);
 
         if (found) {
-            // Check if the random number matches
-            const randomNumberFromData = found.random_number; // Assuming the random number is already in the data
-            
-            // Assuming that you have a way of getting the random number from the QR code or URL to match it
-            const expectedRandomNumber = urlParams.get("random_number"); // Or another source to get this value
-
-            if (randomNumberFromData === expectedRandomNumber) {
-                document.getElementById("result").innerHTML = `
-                    <h1>Eyes Cosmetics</h1>
-                    <h2 class='verified'>✅ Verified Product</h2>
-                `;
-            } else {
-                document.getElementById("result").innerHTML = `
-                    <h1>Eyes Cosmetics</h1>
-                    <h2 class='unverified'>❌ Unverified Product</h2>
-                    <p>The random number does not match. This product is not verified.</p>
-                `;
-            }
+            document.getElementById("result").innerHTML = `
+                <h2 class='verified'>✅ Verified Product</h2>
+            `;
         } else {
             document.getElementById("result").innerHTML = `
-                <h1>Eyes Cosmetics</h1>
                 <h2 class='unverified'>❌ Unverified Product</h2>
                 <p>This product is NOT found in our database.</p>
             `;
