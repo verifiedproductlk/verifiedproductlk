@@ -20,22 +20,26 @@ async function verifyProduct() {
         }
 
         const data = await response.json();
+        console.log("Fetched data:", data); // Debugging
 
         // Find the product using the encrypted hash (QR code)
         const found = data.products.find(item => item.encrypted_hash === code);
 
         if (found) {
-            // Check if the random number matches
-            const randomNumberFromData = found.random_number;
-            const expectedRandomNumber = urlParams.get("random_number"); // The expected random number
-
-            if (randomNumberFromData === expectedRandomNumber) {
-                document.getElementById("result").innerHTML = "<p class='verified'>✅ Verified Product</p>";
-            } else {
-                document.getElementById("result").innerHTML = "<p class='unverified'>❌ Unverified Product: The random number does not match.</p>";
-            }
+            document.getElementById("result").innerHTML = `
+                <h2 class='verified'>✅ Verified Product</h2>
+                <div id="hiddenDetails" style="visibility: hidden;">
+                    <p><strong>Timestamp:</strong> ${found.timestamp}</p>
+                    <p><strong>Random Number:</strong> ${found.random_number}</p>
+                    <p><strong>QR Code:</strong></p>
+                    <img src="https://verifiedproductlk.github.io/verifiedproductlk/${found.qr_code_filename}" width="150" alt="QR Code"/>
+                </div>
+            `;
         } else {
-            document.getElementById("result").innerHTML = "<p class='unverified'>❌ Unverified Product: This product is NOT found in our database.</p>";
+            document.getElementById("result").innerHTML = `
+                <h2 class='unverified'>❌ Unverified Product</h2>
+                <p>This product is NOT found in our database.</p>
+            `;
         }
     } catch (error) {
         console.error("Verification error:", error);
