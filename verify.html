@@ -27,6 +27,7 @@ async function verifyProduct() {
 
         if (found) {
             document.getElementById("result").innerHTML = `
+                <h1>Eyes Cosmetics</h1>
                 <h2 class='verified'>✅ Verified Product</h2>
                 <div id="hiddenDetails" style="visibility: hidden;">
                     <p><strong>Timestamp:</strong> ${found.timestamp}</p>
@@ -37,6 +38,7 @@ async function verifyProduct() {
             `;
         } else {
             document.getElementById("result").innerHTML = `
+                <h1>Eyes Cosmetics</h1>
                 <h2 class='unverified'>❌ Unverified Product</h2>
                 <p>This product is NOT found in our database.</p>
             `;
