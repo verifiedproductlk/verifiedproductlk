@@ -25,8 +25,10 @@ async function verifyProduct() {
         // Find the product using the encrypted hash (QR code)
         const found = data.products.find(item => item.encrypted_hash === code);
 
+        // Insert the brand name above the result
+        let resultHTML = "<h1>Eyes Cosmetics</h1>"; // Brand Name
         if (found) {
-            document.getElementById("result").innerHTML = `
+            resultHTML += `
                 <h2 class='verified'>✅ Verified Product</h2>
                 <div id="hiddenDetails" style="visibility: hidden;">
                     <p><strong>Timestamp:</strong> ${found.timestamp}</p>
@@ -36,11 +38,13 @@ async function verifyProduct() {
                 </div>
             `;
         } else {
-            document.getElementById("result").innerHTML = `
+            resultHTML += `
                 <h2 class='unverified'>❌ Unverified Product</h2>
                 <p>This product is NOT found in our database.</p>
             `;
         }
+
+        document.getElementById("result").innerHTML = resultHTML;
     } catch (error) {
         console.error("Verification error:", error);
         document.getElementById("result").innerHTML = "<p class='unverified'>⚠️ Error verifying product. Please try again later.</p>";
