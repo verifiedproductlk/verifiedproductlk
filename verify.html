@@ -73,10 +73,7 @@
                 if (found) {
                     document.getElementById("result").innerHTML = `
                         <h2 class='verified'>✅ Verified Product</h2>
-                        <p><strong>Timestamp:</strong> ${found.timestamp}</p>
-                        <p><strong>Random Number:</strong> ${found.random_number}</p>
-                        <p><strong>QR Code:</strong></p>
-                        <img src="https://verifiedproductlk.github.io/verifiedproductlk/${found.qr_code_filename}" width="150" alt="QR Code"/>
+                        <p>This product has been successfully verified.</p>
                     `;
                 } else {
                     document.getElementById("result").innerHTML = `
