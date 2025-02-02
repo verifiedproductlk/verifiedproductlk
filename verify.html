@@ -25,20 +25,16 @@ async function verifyProduct() {
         // Find the product using the encrypted hash (QR code)
         const found = data.products.find(item => item.encrypted_hash === code);
 
-        if (found) {
+        if (found && found.random_number) {
+            // If the random number exists for the found product, it is verified
             document.getElementById("result").innerHTML = `
                 <h2 class='verified'>✅ Verified Product</h2>
-                <div id="hiddenDetails" style="visibility: hidden;">
-                    <p><strong>Timestamp:</strong> ${found.timestamp}</p>
-                    <p><strong>Random Number:</strong> ${found.random_number}</p>
-                    <p><strong>QR Code:</strong></p>
-                    <img src="https://verifiedproductlk.github.io/verifiedproductlk/${found.qr_code_filename}" width="150" alt="QR Code"/>
-                </div>
             `;
         } else {
+            // If the product doesn't exist or doesn't match, it's unverified
             document.getElementById("result").innerHTML = `
                 <h2 class='unverified'>❌ Unverified Product</h2>
-                <p>This product is NOT found in our database.</p>
+                <p>This product is NOT found in our database or random number doesn't match.</p>
             `;
         }
     } catch (error) {
