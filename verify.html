@@ -25,8 +25,9 @@ async function verifyProduct() {
         // Find the product using the encrypted hash (QR code)
         const found = data.products.find(item => item.encrypted_hash === code);
 
-        // Insert the brand name above the result
+        // Add the brand name "Eyes Cosmetics" before the result
         let resultHTML = "<h1>Eyes Cosmetics</h1>"; // Brand Name
+
         if (found) {
             resultHTML += `
                 <h2 class='verified'>✅ Verified Product</h2>
