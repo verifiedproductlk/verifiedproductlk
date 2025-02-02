@@ -3,9 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hello World</title>
+    <title>Product Verification</title>
+    <script>
+        async function verifyProduct() {
+            // Get the code from the URL
+            const params = new URLSearchParams(window.location.search);
+            const code = params.get("code");
+
+            if (!code) {
+                document.getElementById("result").innerHTML = "<p style='color: red;'>Invalid request. No verification code provided.</p>";
+                return;
+            }
+
+            // Load stored hash data from JSON
+            const response = await fetch("data.json");
+            const data = await response.json();
+
+            if (data.verified_hashes.hasOwnProperty(code)) {
+                // Update the scan count
+                data.verified_hashes[code]++;
+
+                // Display success message
+                document.getElementById("result").innerHTML = `<p style='color: green;'>✅ Verified product</p>
+                                                                <p>Scan count: ${data.verified_hashes[code]}</p>`;
+
+                // Send updated scan count to GitHub (Only works with a real backend, not static GitHub Pages)
+                updateScanCount(data);
+            } else {
+                document.getElementById("result").innerHTML = "<p style='color: red;'>❌ Unverified product</p>";
+            }
+        }
+
+        // Function to update scan count (Requires backend support)
+        async function updateScanCount(updatedData) {
+            // GitHub Pages does not support writing to files dynamically.
+            // This part requires a backend (Node.js, Firebase, or similar).
+        }
+
+        window.onload = verifyProduct;
+    </script>
 </head>
 <body>
-    <h1>Hello, World!</h1>
+    <h1>Product Verification</h1>
+    <div id="result"><p>Verifying...</p></div>
 </body>
 </html>
