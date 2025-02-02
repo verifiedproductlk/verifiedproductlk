@@ -23,29 +23,33 @@
 
     <script>
         async function verifyProduct() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const code = urlParams.get("code");
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get("code");
 
-            if (!code) {
-                document.getElementById("result").innerText = "❌ Invalid QR Code";
-                return;
-            }
+    if (!code) {
+        document.getElementById("result").innerHTML = "❌ Invalid QR Code";
+        return;
+    }
 
-            try {
-                // Call Cloudflare Worker API for verification
-                const response = await fetch(`https://crimson-dawn-5f3d.businesstroffice.workers.dev/?code=${code}`);
-                const result = await response.text();
-
-                if (result.trim() === "Verified") {
-                    document.getElementById("result").innerText = "✅ Verified Product";
-                } else {
-                    document.getElementById("result").innerText = "❌ Unverified Product";
-                }
-            } catch (error) {
-                console.error("Verification error:", error);
-                document.getElementById("result").innerText = "⚠️ Error verifying product. Please try again.";
-            }
+    try {
+        // Call Cloudflare Worker API for verification
+        const response = await fetch(`https://crimson-dawn-5f3d.businesstroffice.workers.dev/?code=${code}`);
+        
+        // Check if the response is successful
+        if (!response.ok) {
+            throw new Error("Failed to verify product");
         }
+
+        // Get the result text from the response
+        const result = await response.text();
+        
+        // Display the result
+        document.getElementById("result").innerHTML = result;
+    } catch (error) {
+        console.error("Verification error:", error);
+        document.getElementById("result").innerHTML = "⚠️ Error verifying product. Please try again.";
+    }
+}
 
         verifyProduct();
     </script>
