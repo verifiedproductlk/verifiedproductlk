@@ -26,16 +26,24 @@ async function verifyProduct() {
         const found = data.products.find(item => item.encrypted_hash === code);
 
         if (found) {
-            document.getElementById("result").innerHTML = `
-                <h1>Eyes Cosmetics</h1>
-                <h2 class='verified'>✅ Verified Product</h2>
-                <div id="hiddenDetails" style="visibility: hidden;">
-                    <p><strong>Timestamp:</strong> ${found.timestamp}</p>
-                    <p><strong>Random Number:</strong> ${found.random_number}</p>
-                    <p><strong>QR Code:</strong></p>
-                    <img src="https://verifiedproductlk.github.io/verifiedproductlk/${found.qr_code_filename}" width="150" alt="QR Code"/>
-                </div>
-            `;
+            // Check if the random number matches
+            const randomNumberFromData = found.random_number; // Assuming the random number is already in the data
+            
+            // Assuming that you have a way of getting the random number from the QR code or URL to match it
+            const expectedRandomNumber = urlParams.get("random_number"); // Or another source to get this value
+
+            if (randomNumberFromData === expectedRandomNumber) {
+                document.getElementById("result").innerHTML = `
+                    <h1>Eyes Cosmetics</h1>
+                    <h2 class='verified'>✅ Verified Product</h2>
+                `;
+            } else {
+                document.getElementById("result").innerHTML = `
+                    <h1>Eyes Cosmetics</h1>
+                    <h2 class='unverified'>❌ Unverified Product</h2>
+                    <p>The random number does not match. This product is not verified.</p>
+                `;
+            }
         } else {
             document.getElementById("result").innerHTML = `
                 <h1>Eyes Cosmetics</h1>
