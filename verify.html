@@ -1,3 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Verification Eyes Cosmetics</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+        #result {
+            font-size: 20px;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        .timestamp {
+            font-size: 16px;
+            color: gray;
+            margin-top: 10px;
+        }
+        .logo {
+            width: 150px;
+            margin-bottom: 20px;
+        }
+        .disclaimer {
+            font-size: 14px;
+            color: gray;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Add Logo (Change to .jpg) -->
+    <img src="https://raw.githubusercontent.com/verifiedproductlk/verifiedproductlk/main/logo.jpg" alt="Logo" class="logo">
+    
+    <h2>Product Verification</h2>
+    <div id="result">Scanning...</div>
+    <div id="timestamp" class="timestamp"></div>
+
+    <!-- Add Disclaimer -->
+    <div class="disclaimer">
+        <p>Disclaimer: This product verification is for informational purposes only. Please refer to the official website for full terms and conditions.</p>
+    </div>
+
 <script>
     async function verifyProduct() {
         const urlParams = new URLSearchParams(window.location.search);
@@ -38,3 +84,5 @@
 
     verifyProduct();
 </script>
+</body>
+</html>
