@@ -9,7 +9,37 @@
             font-family: Arial, sans-serif;
             text-align: center;
             margin: 50px;
+            background: repeating-linear-gradient(
+                45deg,
+                rgba(0, 0, 0, 0.05) 0px,
+                rgba(0, 0, 0, 0.05) 40px,
+                transparent 40px,
+                transparent 80px
+            ), repeating-linear-gradient(
+                -45deg,
+                rgba(0, 0, 0, 0.05) 0px,
+                rgba(0, 0, 0, 0.05) 40px,
+                transparent 40px,
+                transparent 80px
+            );
+            position: relative;
         }
+
+        /* Watermark Text */
+        body::before {
+            content: "S2F ";
+            font-size: 40px;
+            font-weight: bold;
+            color: rgba(0, 0, 0, 0.08);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            white-space: nowrap;
+            z-index: -1;
+            user-select: none;
+        }
+
         #result {
             font-size: 20px;
             margin-top: 20px;
@@ -32,7 +62,7 @@
     </style>
 </head>
 <body>
-    <!-- Add Logo (Change to .jpg) -->
+    <!-- Add Logo -->
     <img src="https://raw.githubusercontent.com/verifiedproductlk/verifiedproductlk/main/logo.jpg" alt="Logo" class="logo">
     
     <h2>Product Verification</h2>
