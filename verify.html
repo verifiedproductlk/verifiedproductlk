@@ -15,6 +15,11 @@
             margin-top: 20px;
             font-weight: bold;
         }
+        .timestamp {
+            font-size: 16px;
+            color: gray;
+            margin-top: 10px;
+        }
         .logo {
             width: 150px;
             margin-bottom: 20px;
@@ -32,6 +37,7 @@
     
     <h2>Product Verification</h2>
     <div id="result">Scanning...</div>
+    <div id="timestamp" class="timestamp"></div>
 
     <!-- Add Disclaimer -->
     <div class="disclaimer">
@@ -45,6 +51,7 @@
 
             if (!code) {
                 document.getElementById("result").innerHTML = "❌ Invalid QR Code";
+                document.getElementById("timestamp").innerHTML = getTimestamp();
                 return;
             }
 
@@ -60,12 +67,19 @@
                 // Get the result text from the response
                 const result = await response.text();
                 
-                // Display the result
+                // Display the result and timestamp
                 document.getElementById("result").innerHTML = result;
+                document.getElementById("timestamp").innerHTML = `🕒 Scanned on: ${getTimestamp()}`;
             } catch (error) {
                 console.error("Verification error:", error);
                 document.getElementById("result").innerHTML = "⚠️ ❌ Unverified Product";
+                document.getElementById("timestamp").innerHTML = getTimestamp();
             }
+        }
+
+        function getTimestamp() {
+            const now = new Date();
+            return now.toLocaleString(); // Formats as "MM/DD/YYYY, HH:MM:SS AM/PM"
         }
 
         verifyProduct();
