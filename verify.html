@@ -68,7 +68,7 @@
             const data = await response.json();
 
             // Display result, scan count, and timestamp
-            document.getElementById("result").innerHTML = `${data.result} <br> 📊 Scans: ${data.scans}`;
+            document.getElementById("result").innerHTML = `${data.result} <br> 📊 Verification Count: ${data.scans}`;
             document.getElementById("timestamp").innerHTML = `🕒 Scanned on: ${getTimestamp()}`;
         } catch (error) {
             console.error("Verification error:", error);
