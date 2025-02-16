@@ -27,39 +27,56 @@
     <h1>Product Verification</h1>
     <p id="message">Verifying...</p>
 
-    <script>
-        async function verifyProduct() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const code = urlParams.get("code");
+<script>
+    async function verifyProduct() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get("code");
 
-            if (!code) {
-                document.getElementById("message").innerHTML = "<span class='error'>Invalid QR Code!</span>";
-                return;
-            }
-
-            try {
-                // Fetch the JSON data from Cloudflare KV
-                const response = await fetch("https://verifiedproductlk.github.io/verifiedproductlk/encrypted_hashes.json");
-                const data = await response.json();
-                
-                // Find the matching product
-                const product = data.products.find(p => p.encrypted_hash === code);
-
-                if (product) {
-                    document.getElementById("message").innerHTML = 
-                        `<span class='verified'>Product Verified!</span><br>
-                        Serial Number: <b>${product.serial_number}</b>`;
-                } else {
-                    document.getElementById("message").innerHTML = "<span class='error'>Product Not Found!</span>";
-                }
-            } catch (error) {
-                console.error("Error fetching JSON:", error);
-                document.getElementById("message").innerHTML = "<span class='error'>Error Verifying Product</span>";
-            }
+        if (!code) {
+            document.getElementById("result").innerHTML = "❌ Invalid QR Code";
+            document.getElementById("timestamp").innerHTML = getTimestamp();
+            return;
         }
 
-        verifyProduct();
-    </script>
+        try {
+            // Fetch product data from Cloudflare KV (Update with your actual API URL)
+            const response = await fetch("https://crimson-dawn-5f3d.businesstroffice.workers.dev/");
+            
+            if (!response.ok) {
+                throw new Error("Failed to retrieve product data");
+            }
+
+            const data = await response.json();
+
+            // Ensure 'products' array exists
+            if (!data.products || !Array.isArray(data.products)) {
+                throw new Error("Invalid JSON structure");
+            }
+
+            // Search for the matching encrypted_hash
+            const product = data.products.find(item => item.encrypted_hash === code);
+
+            if (product) {
+                document.getElementById("result").innerHTML = `✅ Verified! Serial: <b>${product.serial_number}</b>`;
+            } else {
+                document.getElementById("result").innerHTML = "❌ Unverified Product";
+            }
+
+            document.getElementById("timestamp").innerHTML = `🕒 Scanned on: ${getTimestamp()}`;
+        } catch (error) {
+            console.error("Verification error:", error);
+            document.getElementById("result").innerHTML = "⚠️ Error Verifying Product";
+            document.getElementById("timestamp").innerHTML = getTimestamp();
+        }
+    }
+
+    function getTimestamp() {
+        const now = new Date();
+        return now.toLocaleString(); // Formats as "MM/DD/YYYY, HH:MM:SS AM/PM"
+    }
+
+    verifyProduct();
+</script>
 
 </body>
 </html>
