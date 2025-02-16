@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,46 +11,68 @@
             text-align: center;
             margin: 50px;
         }
+
         #result {
             font-size: 20px;
             margin-top: 20px;
             font-weight: bold;
         }
+
         .timestamp {
             font-size: 16px;
             color: gray;
             margin-top: 10px;
         }
+
         .logo {
             width: 150px;
             margin-bottom: 20px;
         }
+
         .disclaimer {
             font-size: 14px;
             color: gray;
             margin-top: 30px;
         }
+
         .bullet-points {
-            text-align: left;
+            text-align: center;
+            /* Center-align the list */
             margin-top: 20px;
             font-size: 16px;
         }
+
         .bullet-points ul {
             list-style-type: disc;
-            padding-left: 40px;
+            padding-left: 0;
+            /* Remove default padding */
+            display: inline-block;
+            /* Keep the list centered */
+            text-align: left;
+            /* Keep the text aligned to the left within the centered list */
+        }
+
+        .bullet-points h2 {
+            font-size: 18px;
+            margin-bottom: 10px;
         }
     </style>
 </head>
+
 <body>
     <!-- Add Logo (Change to .jpg) -->
     <img src="https://raw.githubusercontent.com/verifiedproductlk/verifiedproductlk/main/logoS2F.jpg" alt="Logo" class="logo">
-    
+
     <h2>Product Verification</h2>
+
+    <div id="result">Scanning...</div>
+    <div id="timestamp" class="timestamp"></div>
 
     <!-- Add Bullet Points -->
     <div class="bullet-points">
+        <h2>Serve to</h2>
         <ul>
-            <li>Serve to Increase appetite</li>
+            <li>Increase appetite</li>
             <li>Energy booster delivers all day</li>
             <li>Beautify the body shape without excessive fat</li>
             <li>Stabilize Metabolism</li>
@@ -59,53 +82,51 @@
         </ul>
     </div>
 
-    <div id="result">Scanning...</div>
-    <div id="timestamp" class="timestamp"></div>
-
     <!-- Add Disclaimer -->
     <div class="disclaimer">
         <p>Disclaimer: This product verification is for informational purposes only. Please refer to the official website for full terms and conditions.</p>
     </div>
 
-<script>
-    async function verifyProduct() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const code = urlParams.get("code");
+    <script>
+        async function verifyProduct() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const code = urlParams.get("code");
 
-        if (!code) {
-            document.getElementById("result").innerHTML = "❌ Invalid QR Code";
-            document.getElementById("timestamp").innerHTML = getTimestamp();
-            return;
-        }
-
-        try {
-            // Call Cloudflare Worker API for verification
-            const response = await fetch(`https://crimson-dawn-5f3d.businesstroffice.workers.dev/?code=${code}`);
-            
-            // Check if the response is successful
-            if (!response.ok) {
-                throw new Error("Failed to verify product");
+            if (!code) {
+                document.getElementById("result").innerHTML = "❌ Invalid QR Code";
+                document.getElementById("timestamp").innerHTML = getTimestamp();
+                return;
             }
 
-            // Parse JSON response
-            const data = await response.json();
+            try {
+                // Call Cloudflare Worker API for verification
+                const response = await fetch(`https://crimson-dawn-5f3d.businesstroffice.workers.dev/?code=${code}`);
 
-            // Display result, scan count, and timestamp
-            document.getElementById("result").innerHTML = `${data.result} <br> 📊 Verification Count: ${data.scans}`;
-            document.getElementById("timestamp").innerHTML = `🕒 Scanned on: ${getTimestamp()}`;
-        } catch (error) {
-            console.error("Verification error:", error);
-            document.getElementById("result").innerHTML = "⚠️ ❌ Unverified Product";
-            document.getElementById("timestamp").innerHTML = getTimestamp();
+                // Check if the response is successful
+                if (!response.ok) {
+                    throw new Error("Failed to verify product");
+                }
+
+                // Parse JSON response
+                const data = await response.json();
+
+                // Display result, scan count, and timestamp
+                document.getElementById("result").innerHTML = `${data.result} <br> 📊 Verification Count: ${data.scans}`;
+                document.getElementById("timestamp").innerHTML = `🕒 Scanned on: ${getTimestamp()}`;
+            } catch (error) {
+                console.error("Verification error:", error);
+                document.getElementById("result").innerHTML = "⚠️ ❌ Unverified Product";
+                document.getElementById("timestamp").innerHTML = getTimestamp();
+            }
         }
-    }
 
-    function getTimestamp() {
-        const now = new Date();
-        return now.toLocaleString(); // Formats as "MM/DD/YYYY, HH:MM:SS AM/PM"
-    }
+        function getTimestamp() {
+            const now = new Date();
+            return now.toLocaleString(); // Formats as "MM/DD/YYYY, HH:MM:SS AM/PM"
+        }
 
-    verifyProduct();
-</script>
+        verifyProduct();
+    </script>
 </body>
+
 </html>
