@@ -46,6 +46,13 @@
             font-weight: bold;
         }
 
+        #scanCount {
+            font-size: 18px;
+            margin-top: 10px;
+            font-weight: normal;
+            color: green;
+        }
+
         .timestamp {
             font-size: 16px;
             color: gray;
@@ -73,6 +80,7 @@
     
     <h2>Product Verification</h2>
     <div id="result">Scanning...</div>
+    <div id="scanCount"></div> <!-- Added this div to display scan count -->
     <div id="timestamp" class="timestamp"></div>
 
     <!-- Add Disclaimer -->
@@ -93,7 +101,7 @@
             }
         }
 
-        // Display verification message and timestamp
+        // Display verification message, scan count, and timestamp
         async function verifyProduct() {
             const urlParams = new URLSearchParams(window.location.search);
             const code = urlParams.get("code");
@@ -112,9 +120,19 @@
                     throw new Error("Failed to verify product");
                 }
 
-                const result = await response.text();
-                
-                document.getElementById("result").innerHTML = result;
+                const result = await response.json(); // Changed to JSON to parse the response body
+
+                // Display the verification result
+                document.getElementById("result").innerHTML = result.message;
+
+                // Display the scan count if available
+                if (result.scanCount !== undefined) {
+                    document.getElementById("scanCount").innerHTML = `Scans: ${result.scanCount}`;
+                } else {
+                    document.getElementById("scanCount").innerHTML = `Scans: 0`;
+                }
+
+                // Update the timestamp
                 document.getElementById("timestamp").innerHTML = `🕒 Scanned on: ${getTimestamp()}`;
             } catch (error) {
                 console.error("Verification error:", error);
