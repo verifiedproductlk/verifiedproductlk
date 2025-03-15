@@ -114,13 +114,13 @@
                     document.getElementById("timestamp").style.display = "block"; // Show timestamp
                 } else if (data.result === "Verified Product") {
                     // Show all content if product is verified
-                    document.getElementById("logo").style.display = "block";
-                    document.getElementById("result").innerHTML = "Verified Product";
-                    document.getElementById("result").style.display = "block";
-                    document.getElementById("timestamp").style.display = "block";
+                    document.getElementById("logo").style.display = "block"; // Show the logo
+                    document.getElementById("result").innerHTML = "Verified Product"; // Update result
+                    document.getElementById("result").style.display = "block"; // Show result message
+                    document.getElementById("timestamp").style.display = "block"; // Show timestamp
                     document.getElementById("timestamp").innerHTML = `🕒 Scanned on: ${getTimestamp()}`;
-                    document.querySelector(".product-description").style.display = "block";
-                    document.querySelector(".disclaimer").style.display = "block";
+                    document.querySelector(".product-description").style.display = "block"; // Show product description
+                    document.querySelector(".disclaimer").style.display = "block"; // Show disclaimer
                 }
             } catch (error) {
                 console.error("Verification error:", error);
@@ -135,6 +135,7 @@
             return now.toLocaleString(); // Formats as "MM/DD/YYYY, HH:MM:SS AM/PM"
         }
 
+        // Run the verification function on page load
         verifyProduct();
     </script>
 </body>
