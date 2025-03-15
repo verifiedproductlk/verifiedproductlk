@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Verification Eyes Cosmetics</title>
+    <title>Product Verification</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -13,26 +13,23 @@
         }
 
         #result {
-            font-size: 20px;
-            margin-top: 20px;
+            font-size: 30px;
             font-weight: bold;
+            margin-top: 20px;
+            display: none; /* Initially hidden */
         }
 
         .timestamp {
             font-size: 16px;
             color: gray;
             margin-top: 10px;
+            display: none; /* Initially hidden */
         }
 
         .logo {
             width: 150px;
             margin-bottom: 20px;
-        }
-
-        .disclaimer {
-            font-size: 14px;
-            color: gray;
-            margin-top: 30px;
+            display: none; /* Initially hidden */
         }
 
         .product-description {
@@ -42,11 +39,23 @@
             max-width: 600px;
             margin-left: auto;
             margin-right: auto;
+            display: none; /* Initially hidden */
         }
 
-        .product-description h2 {
-            font-size: 18px;
-            margin-bottom: 10px;
+        .disclaimer {
+            font-size: 14px;
+            color: gray;
+            margin-top: 30px;
+            display: none; /* Initially hidden */
+        }
+
+        /* Show unverified message */
+        .unverified {
+            display: block;
+            font-size: 30px;
+            font-weight: bold;
+            color: red;
+            margin-top: 50px;
         }
     </style>
 </head>
@@ -57,7 +66,9 @@
 
     <h2>Product Verification</h2>
 
-    <div id="result">Scanning...</div>
+    <!-- Message for unverified product -->
+    <div id="result">Unverified Product</div>
+
     <div id="timestamp" class="timestamp"></div>
 
     <!-- Product Description -->
@@ -66,7 +77,7 @@
         <p>This formula is designed to increase appetite and enhance energy levels throughout the day while promoting a healthy, well-shaped body without excessive fat. It helps stabilize metabolism and supports weight gain by maximizing the body's utilization of essential nutrients. Additionally, it aids in smoothing the digestive system, ensuring efficient nutrient absorption for overall well-being.</p>
     </div>
 
-    <!-- Add Disclaimer -->
+    <!-- Disclaimer -->
     <div class="disclaimer">
         <p>Disclaimer: This product verification is for informational purposes only. Please refer to the official website for full terms and conditions.</p>
     </div>
@@ -79,6 +90,7 @@
             if (!code) {
                 document.getElementById("result").innerHTML = "❌ Invalid QR Code";
                 document.getElementById("timestamp").innerHTML = getTimestamp();
+                document.getElementById("result").style.display = "block"; // Show message
                 return;
             }
 
@@ -94,13 +106,26 @@
                 // Parse JSON response
                 const data = await response.json();
 
-                // Display result, scan count, and timestamp
-                document.getElementById("result").innerHTML = `${data.result} <br> Verification Count: ${data.scans}`;
-                document.getElementById("timestamp").innerHTML = `Scanned on: ${getTimestamp()}`;
+                // If the result is "Unverified Product", show the message
+                if (data.result === "Unverified Product") {
+                    document.getElementById("result").innerHTML = "Unverified Product";
+                    document.getElementById("result").style.display = "block"; // Show the unverified message
+                    document.getElementById("timestamp").innerHTML = `🕒 Scanned on: ${getTimestamp()}`;
+                    document.getElementById("timestamp").style.display = "block"; // Show timestamp
+                } else if (data.result === "Verified Product") {
+                    // Show all content if product is verified
+                    document.getElementById("logo").style.display = "block";
+                    document.getElementById("result").style.display = "block";
+                    document.getElementById("timestamp").style.display = "block";
+                    document.getElementById("timestamp").innerHTML = `🕒 Scanned on: ${getTimestamp()}`;
+                    document.getElementById("product-description").style.display = "block";
+                    document.getElementById("disclaimer").style.display = "block";
+                }
             } catch (error) {
                 console.error("Verification error:", error);
                 document.getElementById("result").innerHTML = "⚠️ ❌ Unverified Product";
                 document.getElementById("timestamp").innerHTML = getTimestamp();
+                document.getElementById("result").style.display = "block"; // Show message
             }
         }
 
