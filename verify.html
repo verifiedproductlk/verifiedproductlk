@@ -26,7 +26,7 @@
             display: none; /* Initially hidden */
         }
 
-        .logo {
+        #logo {
             width: 150px;
             margin-bottom: 20px;
             display: none; /* Initially hidden */
@@ -62,7 +62,7 @@
 
 <body>
     <!-- Add Logo (Change to .jpg) -->
-    <img src="https://raw.githubusercontent.com/verifiedproductlk/verifiedproductlk/main/logoS2F.jpg" alt="Logo" class="logo">
+    <img id="logo" src="https://raw.githubusercontent.com/verifiedproductlk/verifiedproductlk/main/logoS2F.jpg" alt="Logo">
 
     <h2>Product Verification</h2>
 
@@ -115,11 +115,12 @@
                 } else if (data.result === "Verified Product") {
                     // Show all content if product is verified
                     document.getElementById("logo").style.display = "block";
+                    document.getElementById("result").innerHTML = "Verified Product";
                     document.getElementById("result").style.display = "block";
                     document.getElementById("timestamp").style.display = "block";
                     document.getElementById("timestamp").innerHTML = `🕒 Scanned on: ${getTimestamp()}`;
-                    document.getElementById("product-description").style.display = "block";
-                    document.getElementById("disclaimer").style.display = "block";
+                    document.querySelector(".product-description").style.display = "block";
+                    document.querySelector(".disclaimer").style.display = "block";
                 }
             } catch (error) {
                 console.error("Verification error:", error);
