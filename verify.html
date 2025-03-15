@@ -54,7 +54,7 @@
 
 <body>
     <!-- Add Logo (Change to .jpg) -->
-    <img src="https://raw.githubusercontent.com/verifiedproductlk/verifiedproductlk/main/logoS2F.jpg" alt="Logo" class="logo">
+    <img src="https://raw.githubusercontent.com/verifiedproductlk/verifiedproductlk/main/logoS2F.jpg" alt="Logo" class="logo" id="logo">
 
     <h2>Product Verification</h2>
 
@@ -99,11 +99,12 @@
                 document.getElementById("result").innerHTML = `${data.result} <br> Verification Count: ${data.scans}`;
                 document.getElementById("timestamp").innerHTML = `🕒 Scanned on: ${getTimestamp()}`;
 
-                // If the product is unverified, change background color and hide descriptions
+                // If the product is unverified, change background color and hide elements
                 if (data.result === "Unverified Product") {
                     document.body.style.backgroundColor = "red"; // Change background color to red
                     document.querySelector(".product-description").classList.add("hidden"); // Hide English description
                     document.querySelector(".product-descriptionmalay").classList.add("hidden"); // Hide Malay description
+                    document.getElementById("logo").classList.add("hidden"); // Hide Logo
                 }
 
             } catch (error) {
@@ -111,10 +112,11 @@
                 document.getElementById("result").innerHTML = "⚠️ ❌ Unverified Product";
                 document.getElementById("timestamp").innerHTML = getTimestamp();
 
-                // If the product is unverified, change background color and hide descriptions
+                // If the product is unverified, change background color and hide elements
                 document.body.style.backgroundColor = "red"; // Change background color to red
                 document.querySelector(".product-description").classList.add("hidden"); // Hide English description
                 document.querySelector(".product-descriptionmalay").classList.add("hidden"); // Hide Malay description
+                document.getElementById("logo").classList.add("hidden"); // Hide Logo
             }
         }
 
