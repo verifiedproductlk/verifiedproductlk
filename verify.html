@@ -10,6 +10,7 @@
             font-family: Arial, sans-serif;
             text-align: center;
             margin: 50px;
+            transition: background-color 0.5s ease;
         }
 
         #result {
@@ -29,15 +30,7 @@
             margin-bottom: 20px;
         }
 
-        .product-descriptionmalay {
-            text-align: center;
-            margin-top: 30px;
-            font-size: 16px;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
+        .product-descriptionmalay,
         .product-description {
             text-align: center;
             margin-top: 20px;
@@ -45,11 +38,16 @@
             max-width: 600px;
             margin-left: auto;
             margin-right: auto;
+            display: block;
         }
 
         .product-description h2 {
             font-size: 18px;
             margin-bottom: 10px;
+        }
+
+        .hidden {
+            display: none;
         }
     </style>
 </head>
@@ -100,10 +98,23 @@
                 // Display result, scan count, and timestamp
                 document.getElementById("result").innerHTML = `${data.result} <br> Verification Count: ${data.scans}`;
                 document.getElementById("timestamp").innerHTML = `🕒 Scanned on: ${getTimestamp()}`;
+
+                // If the product is unverified, change background color and hide descriptions
+                if (data.result === "Unverified Product") {
+                    document.body.style.backgroundColor = "red"; // Change background color to red
+                    document.querySelector(".product-description").classList.add("hidden"); // Hide English description
+                    document.querySelector(".product-descriptionmalay").classList.add("hidden"); // Hide Malay description
+                }
+
             } catch (error) {
                 console.error("Verification error:", error);
                 document.getElementById("result").innerHTML = "⚠️ ❌ Unverified Product";
                 document.getElementById("timestamp").innerHTML = getTimestamp();
+
+                // If the product is unverified, change background color and hide descriptions
+                document.body.style.backgroundColor = "red"; // Change background color to red
+                document.querySelector(".product-description").classList.add("hidden"); // Hide English description
+                document.querySelector(".product-descriptionmalay").classList.add("hidden"); // Hide Malay description
             }
         }
 
