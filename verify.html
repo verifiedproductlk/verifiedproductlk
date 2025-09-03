@@ -98,8 +98,8 @@
             to { transform: rotate(360deg); }
         }
 
-        /* Success & Error Overlay */
-        .overlay {
+        /* Success Tick Animation */
+        .success-overlay {
             position: fixed;
             top: 0;
             left: 0;
@@ -109,18 +109,18 @@
             justify-content: center;
             align-items: center;
             flex-direction: column;
-            opacity: 0;
+            background: transparent;
             pointer-events: none;
+            opacity: 0;
             transition: opacity 0.5s ease;
             z-index: 999;
         }
-        .overlay.show {
+        .success-overlay.show {
             opacity: 1;
-            pointer-events: auto;
         }
 
-        /* Circle Icon */
-        .circle {
+        /* Success Circle */
+        .success-circle {
             width: 120px;
             height: 120px;
             background: #fff;
@@ -129,44 +129,88 @@
             justify-content: center;
             align-items: center;
             animation: popIn 0.5s ease forwards;
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.5);
         }
         @keyframes popIn {
             0% { transform: scale(0.5); opacity: 0; }
             100% { transform: scale(1); opacity: 1; }
         }
 
-        /* Tick & Cross */
+        /* Tick Icon */
         .tick {
             color: #28a745;
             font-size: 70px;
             font-weight: bold;
         }
-        .cross {
-            color: #dc3545;
-            font-size: 70px;
-            font-weight: bold;
-        }
 
         /* Success Text */
-        .success-text, .error-text {
+        .success-text {
             color: #fff;
             font-size: 24px;
             margin-top: 20px;
             font-weight: 600;
             animation: fadeIn 0.6s ease forwards;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.3);
         }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* Error Overlay */
+        .error-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #dc3545;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+            z-index: 9999;
+        }
+        .error-overlay.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Cross Circle */
+        .error-circle {
+            width: 120px;
+            height: 120px;
+            background: #fff;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: popIn 0.5s ease forwards;
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.5);
+        }
+
+        /* Cross Icon */
+        .cross {
+            color: #dc3545;
+            font-size: 70px;
+            font-weight: bold;
+        }
+
+        /* Error Text */
+        .error-text {
+            color: #fff;
+            font-size: 24px;
+            margin-top: 20px;
+            font-weight: 600;
+            animation: fadeIn 0.6s ease forwards;
+        }
+
         /* Success Background */
         .success-bg {
             background: #28a745 !important;
-        }
-        /* Error Background */
-        .error-bg {
-            background: #dc3545 !important;
         }
     </style>
 </head>
@@ -184,16 +228,16 @@
     </div>
 
     <!-- Success Overlay -->
-    <div id="successOverlay" class="overlay" style="background:#28a745;">
-        <div class="circle">
+    <div id="successOverlay" class="success-overlay">
+        <div class="success-circle">
             <div class="tick">✔</div>
         </div>
         <div class="success-text">Product Verified</div>
     </div>
 
     <!-- Error Overlay -->
-    <div id="errorOverlay" class="overlay" style="background:#dc3545;">
-        <div class="circle">
+    <div id="errorOverlay" class="error-overlay">
+        <div class="error-circle">
             <div class="cross">✖</div>
         </div>
         <div class="error-text">Unverified Product</div>
@@ -214,10 +258,10 @@
                 resultEl.classList.remove('scanning');
                 resultEl.innerHTML = "❌ Invalid QR Code";
                 timestampEl.innerHTML = getTimestamp();
-                document.body.classList.add("error-bg");
                 logo.style.display = "none";
                 disclaimer.style.display = "none";
                 errorOverlay.classList.add("show");
+                document.body.style.background = "#dc3545";
                 return;
             }
 
@@ -231,13 +275,19 @@
                 timestampEl.innerHTML = `🕒 Scanned on: ${getTimestamp()}`;
 
                 if (data.result.toLowerCase().includes("verified")) {
+                    // Set green background and show tick animation
                     document.body.classList.add("success-bg");
                     successOverlay.classList.add("show");
+
+                    // Keep logo and disclaimer visible
                     logo.style.display = "block";
                     disclaimer.style.display = "block";
                 } else {
-                    document.body.classList.add("error-bg");
+                    // Set red background and show error overlay
+                    document.body.style.background = "#dc3545";
                     errorOverlay.classList.add("show");
+
+                    // Hide logo and disclaimer
                     logo.style.display = "none";
                     disclaimer.style.display = "none";
                 }
@@ -246,8 +296,12 @@
                 resultEl.classList.remove('scanning');
                 resultEl.innerHTML = "⚠️ ❌ Unverified Product";
                 timestampEl.innerHTML = getTimestamp();
-                document.body.classList.add("error-bg");
+
+                // Show red overlay
+                document.body.style.background = "#dc3545";
                 errorOverlay.classList.add("show");
+
+                // Hide logo and disclaimer
                 logo.style.display = "none";
                 disclaimer.style.display = "none";
             }
