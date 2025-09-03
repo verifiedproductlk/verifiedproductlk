@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Scan • Verify • Trust — QR Code Product Verification</title>
+  <meta name="description" content="QR code product verification for brands and consumers. Provide secure QR stickers, attach to products, and let customers scan to verify authenticity instantly." />
+  <meta property="og:title" content="Scan • Verify • Trust" />
+  <meta property="og:description" content="QR code product verification for brands and consumers." />
+  <meta property="og:type" content="website" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg: #0f1216; /* dark slate */
+      --panel:#141922;
+      --muted:#8b95a7;
+      --text:#e9edf5;
+      --accent:#7dd3fc; /* sky */
+      --accent-2:#a7f3d0; /* mint */
+      --success:#22c55e;
+      --danger:#ef4444;
+      --ring: 0 10px 30px rgba(125,211,252,.25);
+      --radius: 18px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Helvetica,Arial,sans-serif;
+      color:var(--text);
+      background: radial-gradient(1200px 800px at 80% -10%, rgba(125,211,252,.10), transparent 60%),
+                  radial-gradient(1200px 800px at -10% 120%, rgba(167,243,208,.08), transparent 60%),
+                  var(--bg);
+      line-height:1.6;
+    }
+    a{color:inherit;text-decoration:none}
+    .container{width:min(1120px,90vw);margin:0 auto}
+    .btn{display:inline-flex;align-items:center;gap:.6rem;padding:.9rem 1.2rem;border-radius:14px;border:1px solid rgba(255,255,255,.08);background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));backdrop-filter: blur(6px); color:var(--text);font-weight:600;transition:.2s transform, .2s box-shadow}
+    .btn:hover{transform:translateY(-2px);box-shadow: var(--ring)}
+    .btn.primary{background:linear-gradient(180deg, #0ea5e9, #0284c7); border-color: transparent}
+
+    /* Header */
+    header{position:sticky;top:0;z-index:50;backdrop-filter:saturate(180%) blur(10px);background:rgba(15,18,22,.6);border-bottom:1px solid rgba(255,255,255,.06)}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
+    .brand{display:flex;align-items:center;gap:.7rem}
+    .logo{width:44px;height:44px;border-radius:12px;background:linear-gradient(225deg, var(--accent), var(--accent-2));box-shadow: 0 6px 18px rgba(125,211,252,.35)}
+    .brand h1{font-size:1.05rem;margin:0;font-weight:700;letter-spacing:.2px}
+    .nav a{opacity:.9}
+
+    /* Hero */
+    .hero{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;padding:64px 0 40px}
+    .headline{font-size:clamp(2rem, 4vw, 3rem);line-height:1.15;margin:0 0 14px;font-weight:800}
+    .sub{color:var(--muted);font-size:1.05rem;margin-bottom:24px}
+    .cta{display:flex;gap:12px;flex-wrap:wrap}
+    .statbar{display:flex;gap:14px;flex-wrap:wrap;margin-top:20px;color:var(--muted)}
+    .stat{display:flex;align-items:center;gap:8px;padding:.5rem .8rem;border:1px solid rgba(255,255,255,.08);border-radius:999px;background:rgba(255,255,255,.03)}
+
+    .glass{position:relative;border-radius:var(--radius);padding:20px;background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));border:1px solid rgba(255,255,255,.1);box-shadow: 0 10px 30px rgba(0,0,0,.25)}
+
+    .mock{aspect-ratio:9/16;border-radius:26px;border:1px solid rgba(255,255,255,.1);background:linear-gradient(180deg,#0b0f15,#121823);padding:16px;display:flex;flex-direction:column;gap:12px;box-shadow: 0 30px 80px rgba(0,0,0,.45)}
+    .camera-dot{width:6px;height:6px;border-radius:50%;background:#1f2937;align-self:center}
+    .screen{flex:1;border-radius:18px;background: #0a0f14;border:1px solid rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+    .qr{width:140px;height:140px;background:white;padding:10px;border-radius:12px;display:grid;place-items:center;box-shadow: 0 10px 30px rgba(0,0,0,.35)}
+    .qr svg{width:100%;height:100%}
+    .scanline{position:absolute;inset:20% 10% 60% 10%;border-radius:8px;background:linear-gradient(90deg, rgba(125,211,252,.0), rgba(125,211,252,.35), rgba(125,211,252,.0));filter:blur(1px);animation:scan 2.4s linear infinite}
+    @keyframes scan{0%{transform:translateY(-140px)}100%{transform:translateY(140px)}}
+
+    /* Benefits */
+    .section{padding:64px 0}
+    .section h2{font-size:clamp(1.6rem,3vw,2.2rem);margin:0 0 16px}
+    .muted{color:var(--muted)}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .card{border-radius:var(--radius);border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);padding:20px}
+    .ic{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;background:linear-gradient(225deg, rgba(125,211,252,.2), rgba(167,243,208,.15));margin-bottom:10px}
+
+    /* Process */
+    .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:18px}
+    .step{position:relative;padding:18px;border-radius:16px;border:1px dashed rgba(125,211,252,.35);background:rgba(125,211,252,.06)}
+    .step b{display:block;margin-bottom:6px}
+    .step::after{content:"→";position:absolute;right:-10px;top:50%;transform:translateY(-50%);opacity:.4}
+    .step:last-child::after{display:none}
+
+    /* Demo */
+    .demo{display:grid;grid-template-columns:1.1fr .9fr;gap:20px;align-items:stretch}
+    .demo .panel{border-radius:16px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);padding:18px}
+    .row{display:flex;gap:10px;flex-wrap:wrap}
+    input[type="text"]{flex:1;min-width:220px;background:#0b0f15;color:var(--text);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:.9rem 1rem;outline:none}
+    .badge{display:inline-flex;align-items:center;gap:8px;padding:.45rem .7rem;border-radius:999px;font-size:.9rem}
+    .badge.ok{background:rgba(34,197,94,.15);border:1px solid rgba(34,197,94,.35)}
+    .badge.warn{background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.35)}
+
+    /* FAQ */
+    details{border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:14px;background:rgba(255,255,255,.03)}
+    details+details{margin-top:10px}
+    summary{cursor:pointer;font-weight:600}
+
+    footer{padding:50px 0;color:var(--muted)}
+
+    /* Responsive */
+    @media (max-width: 980px){
+      .hero{grid-template-columns:1fr;}
+      .demo{grid-template-columns:1fr}
+      .grid{grid-template-columns:1fr}
+      .steps{grid-template-columns:1fr 1fr}
+      .step::after{display:none}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <h1>Scan • Verify • Trust</h1>
+      </div>
+      <nav class="row">
+        <a class="btn" href="#process">Process</a>
+        <a class="btn" href="#demo">Live Demo</a>
+        <a class="btn primary" href="#contact">Get QR Codes</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Hero -->
+    <section class="hero">
+      <div>
+        <h2 class="headline">Authenticate any product with a simple scan.</h2>
+        <p class="sub">We issue secure QR stickers to manufacturers. They apply them to each unit. Customers scan to verify authenticity and view rich product details in seconds.</p>
+        <div class="cta">
+          <a class="btn primary" href="#contact">Request a Demo</a>
+          <a class="btn" href="#features">Learn More</a>
+        </div>
+        <div class="statbar">
+          <div class="stat">⚡ Instant results</div>
+          <div class="stat">🔒 Tamper‑evident IDs</div>
+          <div class="stat">📊 Scan analytics</div>
+        </div>
+      </div>
+      <div class="glass">
+        <div class="mock" aria-label="Phone mockup showing QR scan">
+          <div class="camera-dot"></div>
+          <div class="screen">
+            <div class="qr" aria-hidden="true">
+              <!-- Simple placeholder QR SVG -->
+              <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="QR code">
+                <rect width="100" height="100" fill="#000"/>
+                <rect x="6" y="6" width="28" height="28" fill="#fff"/>
+                <rect x="66" y="6" width="28" height="28" fill="#fff"/>
+                <rect x="6" y="66" width="28" height="28" fill="#fff"/>
+                <rect x="18" y="18" width="12" height="12" fill="#000"/>
+                <rect x="78" y="18" width="12" height="12" fill="#000"/>
+                <rect x="18" y="78" width="12" height="12" fill="#000"/>
+                <rect x="38" y="38" width="8" height="8" fill="#fff"/>
+                <rect x="50" y="50" width="8" height="8" fill="#fff"/>
+                <rect x="62" y="62" width="8" height="8" fill="#fff"/>
+              </svg>
+            </div>
+            <div class="scanline"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Benefits -->
+    <section id="features" class="section">
+      <h2>Built for manufacturers, retailers & customers</h2>
+      <p class="muted">Simple rollout. Powerful protection. Delightful consumer experience.</p>
+      <div class="grid" style="margin-top:16px">
+        <div class="card">
+          <div class="ic">🏭</div>
+          <h3>For Manufacturers</h3>
+          <p>Receive serialized, secure QR stickers. Batch assignment, APIs, and dashboards included.</p>
+        </div>
+        <div class="card">
+          <div class="ic">🛒</div>
+          <h3>For Retailers</h3>
+          <p>Assure shelf authenticity. Add store‑level info and promotions to verified pages.</p>
+        </div>
+        <div class="card">
+          <div class="ic">📱</div>
+          <h3>For Customers</h3>
+          <p>Scan to confirm authenticity and view product details, batch, expiry, and safety info.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Process -->
+    <section id="process" class="section">
+      <h2>How it works</h2>
+      <p class="muted">End‑to‑end verification in four simple steps.</p>
+      <div class="steps">
+        <div class="step"><b>1) Provide QR Stickers</b> We generate unique, tamper‑evident codes for each unit.</div>
+        <div class="step"><b>2) Apply to Products</b> Manufacturers place stickers on packaging or labels.</div>
+        <div class="step"><b>3) Scan Anywhere</b> Customers scan with any smartphone camera.</div>
+        <div class="step"><b>4) Verify & Learn</b> Results show Verified/Unverified plus rich product info.</div>
+      </div>
+    </section>
+
+    <!-- Live Demo / API sample -->
+    <section id="demo" class="section">
+      <h2>Try a live verification demo</h2>
+      <p class="muted">Enter a sample code to see instant results. (Uses our public worker endpoint.)</p>
+      <div class="demo">
+        <div class="panel">
+          <div class="row" style="margin-bottom:10px">
+            <input id="codeInput" type="text" placeholder="Enter code e.g. ABC123" aria-label="Sample code" />
+            <button id="verifyBtn" class="btn primary" type="button">Verify Now</button>
+            <button id="fillUrlBtn" class="btn" type="button">Use URL ?code</button>
+          </div>
+          <small class="muted">Tip: Append <code>?code=YOURCODE</code> to the page URL, then click “Use URL ?code”.</small>
+        </div>
+        <div class="panel" id="resultPanel">
+          <div id="statusLine" class="muted">Awaiting input…</div>
+          <div id="resultLine" style="margin-top:8px"></div>
+          <div id="metaLine" class="muted" style="margin-top:6px"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section">
+      <h2>FAQ</h2>
+      <details>
+        <summary>What happens if a code is copied?</summary>
+        <p>Duplicate scans trigger risk signals and you’ll see scan history (time, location, device) in analytics. You can flag and invalidate suspicious codes.</p>
+      </details>
+      <details>
+        <summary>Can we add product details to the verification page?</summary>
+        <p>Yes. Include name, batch, expiry, manufacturing date, store info, and promotions via our API or dashboard.</p>
+      </details>
+      <details>
+        <summary>Does it work offline?</summary>
+        <p>Scanning requires connectivity to retrieve verification results. Offline caching is supported for previously seen items.</p>
+      </details>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="section">
+      <div class="glass">
+        <h2>Ready to protect your brand?</h2>
+        <p class="muted">Get secure QR codes, real‑time verification, and actionable insights.</p>
+        <div class="cta" style="margin-top:12px">
+          <a class="btn primary" href="mailto:hello@example.com">Get QR Codes</a>
+          <a class="btn" href="#demo">See Live Demo</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="container">
+    <div>© <span id="year"></span> Scan • Verify • Trust — QR Code Product Verification</div>
+  </footer>
+
+  <script>
+    const yearEl = document.getElementById('year');
+    yearEl.textContent = new Date().getFullYear();
+
+    const codeInput = document.getElementById('codeInput');
+    const resultLine = document.getElementById('resultLine');
+    const statusLine = document.getElementById('statusLine');
+    const metaLine = document.getElementById('metaLine');
+    const verifyBtn = document.getElementById('verifyBtn');
+    const fillUrlBtn = document.getElementById('fillUrlBtn');
+
+    function getTimestamp(){
+      return new Date().toLocaleString();
+    }
+
+    async function verify(code){
+      if(!code){
+        statusLine.textContent = 'Please enter a code.';
+        resultLine.innerHTML = '';
+        metaLine.textContent = '';
+        return;
+      }
+      statusLine.textContent = 'Verifying…';
+      resultLine.innerHTML = '';
+      metaLine.textContent = '';
+      try{
+        const res = await fetch(`https://crimson-dawn-5f3d.businesstroffice.workers.dev/?code=${encodeURIComponent(code)}`);
+        if(!res.ok) throw new Error('Network error');
+        const data = await res.json();
+        const isVerified = (data.result || '').toLowerCase().includes('verified');
+        resultLine.innerHTML = isVerified
+          ? `<span class="badge ok">✅ Verified</span> <strong>${data.result || ''}</strong>`
+          : `<span class="badge warn">❌ Unverified</span> <strong>${data.result || 'Not verified'}</strong>`;
+        metaLine.textContent = `📊 Scans: ${data.scans ?? '—'}  •  🕒 ${getTimestamp()}`;
+        statusLine.textContent = 'Result:';
+      }catch(err){
+        statusLine.textContent = 'Verification failed.';
+        resultLine.innerHTML = `<span class="badge warn">⚠️ Error</span> Unable to verify at this time.`;
+        metaLine.textContent = getTimestamp();
+        console.error(err);
+      }
+    }
+
+    verifyBtn.addEventListener('click', () => verify(codeInput.value.trim()));
+    fillUrlBtn.addEventListener('click', () => {
+      const params = new URLSearchParams(location.search);
+      const c = params.get('code');
+      if(c){ codeInput.value = c; statusLine.textContent = 'Code loaded from URL.'; }
+      else{ statusLine.textContent = 'No ?code found in URL.'; }
+    });
+  </script>
+</body>
+</html>
