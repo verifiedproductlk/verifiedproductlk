@@ -46,6 +46,7 @@
         .logo {
             width: 200px;
             margin-bottom: 25px;
+            transition: opacity 0.5s ease;
         }
 
         /* Title */
@@ -77,6 +78,7 @@
             font-size: 12px;
             color: #aaa;
             margin-top: 25px;
+            transition: opacity 0.5s ease;
         }
 
         /* Loading Animation */
@@ -96,14 +98,13 @@
             to { transform: rotate(360deg); }
         }
 
-        /* Success Overlay */
-        .success-overlay {
+        /* Success & Error Overlay */
+        .overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: #28a745;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -113,13 +114,13 @@
             transition: opacity 0.5s ease;
             z-index: 999;
         }
-        .success-overlay.show {
+        .overlay.show {
             opacity: 1;
             pointer-events: auto;
         }
 
-        /* Success Circle */
-        .success-circle {
+        /* Circle Icon */
+        .circle {
             width: 120px;
             height: 120px;
             background: #fff;
@@ -134,15 +135,20 @@
             100% { transform: scale(1); opacity: 1; }
         }
 
-        /* Tick Icon */
+        /* Tick & Cross */
         .tick {
             color: #28a745;
             font-size: 70px;
             font-weight: bold;
         }
+        .cross {
+            color: #dc3545;
+            font-size: 70px;
+            font-weight: bold;
+        }
 
         /* Success Text */
-        .success-text {
+        .success-text, .error-text {
             color: #fff;
             font-size: 24px;
             margin-top: 20px;
@@ -153,27 +159,44 @@
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
+        /* Success Background */
+        .success-bg {
+            background: #28a745 !important;
+        }
+        /* Error Background */
+        .error-bg {
+            background: #dc3545 !important;
+        }
     </style>
 </head>
 <body>
 
-    <div class="card">
-        <img src="https://raw.githubusercontent.com/verifiedproductlk/verifiedproductlk/main/example.jpg" alt="Your Company Logo" class="logo">
+    <div class="card" id="card">
+        <img src="https://raw.githubusercontent.com/verifiedproductlk/verifiedproductlk/main/example.jpg" alt="Your Company Logo" class="logo" id="logo">
 
         <h2>Product Verification</h2>
         <div id="result" class="scanning">Scanning...</div>
         <div id="timestamp" class="timestamp"></div>
-        <div class="disclaimer">
+        <div class="disclaimer" id="disclaimer">
             <p>Disclaimer: This product verification is for informational purposes only. Please refer to the official website for full terms and conditions.</p>
         </div>
     </div>
 
     <!-- Success Overlay -->
-    <div id="successOverlay" class="success-overlay">
-        <div class="success-circle">
+    <div id="successOverlay" class="overlay" style="background:#28a745;">
+        <div class="circle">
             <div class="tick">✔</div>
         </div>
         <div class="success-text">Product Verified</div>
+    </div>
+
+    <!-- Error Overlay -->
+    <div id="errorOverlay" class="overlay" style="background:#dc3545;">
+        <div class="circle">
+            <div class="cross">✖</div>
+        </div>
+        <div class="error-text">Unverified Product</div>
     </div>
 
     <script>
@@ -183,11 +206,18 @@
             const resultEl = document.getElementById("result");
             const timestampEl = document.getElementById("timestamp");
             const successOverlay = document.getElementById("successOverlay");
+            const errorOverlay = document.getElementById("errorOverlay");
+            const logo = document.getElementById("logo");
+            const disclaimer = document.getElementById("disclaimer");
 
             if (!code) {
                 resultEl.classList.remove('scanning');
                 resultEl.innerHTML = "❌ Invalid QR Code";
                 timestampEl.innerHTML = getTimestamp();
+                document.body.classList.add("error-bg");
+                logo.style.display = "none";
+                disclaimer.style.display = "none";
+                errorOverlay.classList.add("show");
                 return;
             }
 
@@ -201,15 +231,25 @@
                 timestampEl.innerHTML = `🕒 Scanned on: ${getTimestamp()}`;
 
                 if (data.result.toLowerCase().includes("verified")) {
+                    document.body.classList.add("success-bg");
                     successOverlay.classList.add("show");
-                    document.body.style.background = "#28a745";
-                    document.querySelector(".card").style.display = "none";
+                    logo.style.display = "block";
+                    disclaimer.style.display = "block";
+                } else {
+                    document.body.classList.add("error-bg");
+                    errorOverlay.classList.add("show");
+                    logo.style.display = "none";
+                    disclaimer.style.display = "none";
                 }
             } catch (error) {
                 console.error("Verification error:", error);
                 resultEl.classList.remove('scanning');
                 resultEl.innerHTML = "⚠️ ❌ Unverified Product";
                 timestampEl.innerHTML = getTimestamp();
+                document.body.classList.add("error-bg");
+                errorOverlay.classList.add("show");
+                logo.style.display = "none";
+                disclaimer.style.display = "none";
             }
         }
 
